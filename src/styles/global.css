@@ -1,0 +1,218 @@
+/*
+  Global design tokens and the few layout helpers every section shares.
+  Component-specific styles live inside each .astro component.
+
+  Breakpoints used across the site (mobile first):
+    40rem  (640px)  – small tablets, two-column grids start to appear
+    60rem  (960px)  – the full desktop header and the side-label section layout
+*/
+
+:root {
+  --color-ink: #111111;
+  --color-text: #444444;
+  /* The lightest grey we use for text; it still passes 4.5:1 on white and on the soft background. */
+  --color-muted: #555555;
+  --color-line: #e5e5e5;
+  --color-line-strong: #dadad6;
+  --color-bg: #ffffff;
+  --color-soft: #f4f4f2;
+  --color-soft-2: #fafaf9;
+  /*
+    Brand colours. The logo uses a pastel cyan (#4CC4CF) and green (#39B54A); both are too light for text on white,
+    so the site uses deeper shades from the same family and keeps the logo tones for dark backgrounds.
+  */
+  --color-brand-cyan: #4cc4cf;
+  --color-brand-green: #39b54a;
+  /* The main accent: a deep teal derived from the logo cyan, 5.9:1 on white. */
+  --color-accent: #0a6f79;
+  --color-accent-hover: #085a62;
+  /* The secondary accent: the darker green where the two logo circles overlap, 5.2:1 on white. */
+  --color-accent-2: #007e44;
+  /* On the black section the original logo cyan is bright enough and stays recognisable. */
+  --color-accent-on-dark: var(--color-brand-cyan);
+
+  --font-sans: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --container: 80rem;
+  /* The side gutter grows with the screen but never drops below 16px on phones. */
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --section-space: clamp(4rem, 9vw, 6rem);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Keeps anchored sections from hiding under the sticky header. */
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  /* A last line of defence against any element pushing the page sideways on phones. */
+  overflow-x: clip;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* The small uppercase label that sits on the left of every section on desktop. */
+.eyebrow {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+}
+
+/*
+  The editorial section layout: a narrow column for the label on the left, the content on the right.
+  On phones and tablets the label simply stacks above the content.
+*/
+.section {
+  padding-block: var(--section-space);
+}
+
+.section-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 40rem;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.75rem);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 60rem) {
+  .section-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: 3rem;
+  }
+}
+
+/* Buttons share one shape; the variants only change colours. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-dark {
+  background: var(--color-ink);
+  color: #ffffff;
+}
+
+.btn-dark:hover {
+  background: #2a2a2a;
+  color: #ffffff;
+}
+
+.btn-outline {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.btn-outline:hover {
+  background: var(--color-ink);
+  color: #ffffff;
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-accent:hover {
+  background: var(--color-accent-hover);
+  color: #ffffff;
+}
+
+/* Grey striped boxes that stand in for screenshots until the real ones arrive. */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  background: repeating-linear-gradient(45deg, var(--color-soft-2), var(--color-soft-2) 12px, #f2f2f0 12px, #f2f2f0 24px);
+}

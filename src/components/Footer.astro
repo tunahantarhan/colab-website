@@ -1,0 +1,127 @@
+---
+import Logo from './Logo.astro';
+import { company } from '../data/site';
+import { type Lang, localePath, sectionIds, useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const ids = sectionIds[lang];
+const home = localePath(lang, '/');
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="top">
+      <div class="brand">
+        <Logo lang={lang} compact />
+        <p>{t('brand.legalName')}</p>
+      </div>
+
+      <nav class="col" aria-labelledby="footer-pages">
+        <h2 id="footer-pages">{t('footer.pages')}</h2>
+        <a href={`${home}#${ids.products}`}>{t('nav.products')}</a>
+        <a href={`${home}#${ids.services}`}>{t('nav.services')}</a>
+        <a href={`${home}#${ids.about}`}>{t('nav.about')}</a>
+        <a href={`${home}#${ids.contact}`}>{t('nav.contact')}</a>
+      </nav>
+
+      <div class="col">
+        <h2>{t('footer.address')}</h2>
+        <address>
+          {company.addressLines.map((line) => <span>{line}</span>)}
+        </address>
+        <a href={`mailto:${company.email}`}>{company.email}</a>
+        <a href={company.phoneHref}>{company.phone}</a>
+        <a class="strong" href={company.linkedin} rel="noopener" target="_blank">LinkedIn <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <span>© {year} {t('brand.legalName')}</span>
+      <!-- The legal pages are still to be written; these links will point at them. -->
+      <span class="legal">
+        <a href="#">{t('footer.kvkk')}</a>
+        <a href="#">{t('footer.cookies')}</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-soft);
+    border-top: 1px solid var(--color-ink);
+    font-size: 0.9375rem;
+  }
+
+  .top {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: 3.5rem 2.5rem;
+  }
+
+  /* Three columns from tablet width; on phones everything stacks. */
+  @media (min-width: 40rem) {
+    .top {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1.5fr);
+      gap: 3rem;
+    }
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .brand p {
+    color: var(--color-text);
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    color: var(--color-text);
+  }
+
+  h2 {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  address {
+    display: flex;
+    flex-direction: column;
+    font-style: normal;
+    line-height: 1.5;
+  }
+
+  .strong {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--color-line-strong);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+</style>
