@@ -1,0 +1,70 @@
+---
+import { services } from '../../data/services';
+import { type Lang, sectionIds, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="section services" id={sectionIds[lang].services} aria-labelledby="services-title">
+  <div class="container section-grid">
+    <div class="section-intro">
+      <p class="eyebrow">{t('services.label')}</p>
+      <h2 class="section-title" id="services-title">{t('services.title')}</h2>
+    </div>
+
+    <ul class="grid">
+      {
+        services.map((s) => (
+          <li class="card">
+            <h3>{s.name[lang]}</h3>
+            <p>{s.summary[lang]}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--color-soft);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The accent line on top ties the cards to the orange used elsewhere without adding icons we don't have yet. */
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.75rem;
+    background: var(--color-bg);
+    border-top: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text);
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import { foundingVars } from '../../data/site';
+import { type Lang, sectionIds, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+// The values are stored as one pipe-separated string so translators only have one key to edit.
+const values = t('about.values').split('|');
+---
+
+<section class="section about" id={sectionIds[lang].about} aria-labelledby="about-label">
+  <div class="container section-grid">
+    <h2 class="eyebrow label" id="about-label">{t('about.label')}</h2>
+
+    <div class="content">
+      <p class="statement">{t('about.statement', foundingVars)}</p>
+      <p class="body">{t('about.body')}</p>
+      <ul class="values">
+        {values.map((value) => <li>{value}</li>)}
+      </ul>
+      <!-- There is no About page yet; point this at it once it exists. -->
+      <a class="more" href="#">{t('about.more')} <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background: var(--color-ink);
+    color: #ffffff;
+  }
+
+  /* Orange on black needs the lighter tint to stay readable. */
+  .label {
+    color: var(--color-accent-on-dark);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+    min-width: 0;
+  }
+
+  .statement {
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .body {
+    max-width: 45rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: #d4d4d4;
+  }
+
+  .values {
+    display: grid;
+    /* Two per row on phones, four in a row once there is room. */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .values li {
+    padding: 1.25rem;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+
+  .more {
+    align-self: flex-start;
+    font-weight: 600;
+    color: var(--color-accent-on-dark);
+  }
+
+  .more:hover {
+    color: #ffffff;
+  }
+</style>

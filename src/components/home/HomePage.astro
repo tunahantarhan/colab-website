@@ -4,6 +4,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from './Hero.astro';
 import Stats from './Stats.astro';
 import Products from './Products.astro';
+import Services from './Services.astro';
+import About from './About.astro';
+import Contact from './Contact.astro';
 import type { Lang } from '../../i18n/ui';
 
 interface Props {
@@ -17,4 +20,7 @@ const { lang } = Astro.props;
   <Hero lang={lang} />
   <Stats lang={lang} />
   <Products lang={lang} />
+  <Services lang={lang} />
+  <About lang={lang} />
+  <Contact lang={lang} />
 </BaseLayout>
