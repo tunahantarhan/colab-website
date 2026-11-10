@@ -1,0 +1,149 @@
+---
+import { foundingVars } from '../../data/site';
+import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const ids = sectionIds[lang];
+const home = localePath(lang, '/');
+---
+
+<section class="hero">
+  <div class="container intro">
+    <p class="eyebrow">{t('hero.eyebrow', foundingVars)}</p>
+    <h1>{t('hero.title')}<span class="dot" aria-hidden="true">.</span></h1>
+    <div class="row">
+      <p class="lead">{t('hero.lead')}</p>
+      <div class="buttons">
+        <a class="btn btn-dark" href={`${home}#${ids.products}`}>{t('hero.primary')} <span aria-hidden="true">→</span></a>
+        <a class="btn btn-outline" href={`${home}#${ids.contact}`}>{t('hero.secondary')}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- A browser-style frame around the product screenshot. The image itself is still a placeholder. -->
+    <div class="stage">
+      <figure class="window">
+        <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="placeholder screen" role="img" aria-label={t('hero.screenshot')}>
+          [{t('hero.screenshot')}]
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-block: clamp(3.5rem, 8vw, 5.5rem) clamp(2.5rem, 5vw, 4rem);
+  }
+
+  h1 {
+    max-width: 17em;
+    /* Scales from about 40px on phones up to 76px on wide screens. */
+    font-size: clamp(2.5rem, 1.6rem + 4.2vw, 4.75rem);
+    line-height: 1.04;
+    font-weight: 800;
+    letter-spacing: -0.033em;
+    /* Long Turkish words should break cleanly instead of overflowing on narrow phones. */
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  .dot {
+    color: var(--color-accent);
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .lead {
+    max-width: 38rem;
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* On the smallest phones both buttons take the full width, which is easier to tap. */
+  @media (max-width: 30rem) {
+    .buttons .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .row {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 4rem;
+    }
+
+    .buttons {
+      flex-shrink: 0;
+    }
+  }
+
+  .stage {
+    padding: clamp(1rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 0;
+    background: var(--color-soft);
+    overflow: hidden;
+  }
+
+  .window {
+    margin: 0;
+    background: var(--color-bg);
+    border: 1px solid var(--color-line-strong);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 24px 48px rgba(17, 17, 17, 0.08);
+    overflow: hidden;
+  }
+
+  .window-bar {
+    display: flex;
+    gap: 6px;
+    padding: 12px 16px;
+    background: var(--color-soft-2);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .window-bar span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #d4d4d4;
+  }
+
+  /*
+    A fixed aspect ratio keeps the frame proportional instead of a fixed pixel height.
+    Phones get a taller ratio so the screenshot doesn't shrink into a thin strip.
+    There is deliberately no min-height here: combined with aspect-ratio it would force the box wider than the screen.
+  */
+  .screen {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 40rem) {
+    .screen {
+      aspect-ratio: 16 / 7;
+    }
+  }
+</style>

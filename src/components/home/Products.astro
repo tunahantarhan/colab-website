@@ -1,0 +1,192 @@
+---
+import { products } from '../../data/products';
+import { type Lang, sectionIds, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Numbers run across both groups, so the list continues where the featured cards stop.
+const numbered = products.map((product, index) => ({ ...product, no: String(index + 1).padStart(2, '0') }));
+const featured = numbered.filter((p) => p.featured);
+const rest = numbered.filter((p) => !p.featured);
+
+// Product detail pages don't exist yet, so the links stay as "#" for now.
+const productHref = (_slug: string) => '#';
+---
+
+<section class="section" id={sectionIds[lang].products} aria-labelledby="products-title">
+  <div class="container section-grid">
+    <div class="section-intro">
+      <p class="eyebrow">{t('products.label')}</p>
+      <h2 class="section-title" id="products-title">{t('products.title')}</h2>
+      <p class="muted">{t('products.lead')}</p>
+    </div>
+
+    <div class="content">
+      <ul class="cards">
+        {
+          featured.map((p) => (
+            <li>
+              <a class="card" href={productHref(p.slug)}>
+                <span class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}]</span>
+                <span class="card-body">
+                  <span class="no">{p.no}</span>
+                  <h3 class="card-title">{p.name[lang]}</h3>
+                  <span class="summary">{p.summary[lang]}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <ul class="list">
+        {
+          rest.map((p) => (
+            <li>
+              <a class="item" href={productHref(p.slug)}>
+                <span class="no">{p.no}</span>
+                <h3 class="item-title">{p.name[lang]}</h3>
+                <span class="summary">{p.summary[lang]}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .muted {
+    color: var(--color-muted);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    min-width: 0;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Featured cards: one per row on phones, then as many 16rem columns as fit. */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--color-bg);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    color: var(--color-ink);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .card:hover {
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+    transform: translateY(-2px);
+  }
+
+  .shot {
+    aspect-ratio: 16 / 9;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+    padding: 1.4rem;
+  }
+
+  .no {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+
+  .summary {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+  }
+
+  .card .summary {
+    flex: 1;
+  }
+
+  /* The numbered list. On phones the number and title share a row and the summary drops below. */
+  .list {
+    border-top: 1px solid var(--color-ink);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    grid-template-areas:
+      'no title'
+      '.  summary';
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+
+  .item:hover {
+    color: var(--color-ink);
+  }
+
+  .item:hover .item-title {
+    color: var(--color-accent);
+  }
+
+  .item .no {
+    grid-area: no;
+  }
+
+  .item-title {
+    grid-area: title;
+    font-size: clamp(1.1875rem, 1rem + 0.6vw, 1.375rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition: color 0.15s ease;
+  }
+
+  .item .summary {
+    grid-area: summary;
+  }
+
+  /* From tablet width up, the summary moves into the same row as the title. */
+  @media (min-width: 40rem) {
+    .item {
+      grid-template-columns: 2.5rem minmax(0, 1.2fr) minmax(0, 1fr);
+      grid-template-areas: 'no title summary';
+      gap: 2rem;
+    }
+  }
+</style>

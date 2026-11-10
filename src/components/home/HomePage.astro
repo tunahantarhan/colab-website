@@ -1,0 +1,20 @@
+---
+// The home page is identical in both languages apart from the copy, so both routes render this component.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from './Hero.astro';
+import Stats from './Stats.astro';
+import Products from './Products.astro';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<BaseLayout lang={lang} path="/">
+  <Hero lang={lang} />
+  <Stats lang={lang} />
+  <Products lang={lang} />
+</BaseLayout>

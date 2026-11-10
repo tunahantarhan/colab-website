@@ -1,0 +1,101 @@
+---
+// A band of key figures right under the hero. It replaced the reference strip, which only had one confirmed name.
+import { stats } from '../../data/site';
+import { type Lang, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="stats" aria-labelledby="stats-title">
+  <div class="container">
+    <h2 class="visually-hidden" id="stats-title">{t('stats.title')}</h2>
+    <dl class="grid">
+      {
+        stats.map((stat) => (
+          <div class="stat">
+            <dt>{stat.label[lang]}</dt>
+            <dd>{stat.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .stats {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  /* Two by two on phones, a single row of four once there is room. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  @media (min-width: 60rem) {
+    .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* The figure is shown above its label, but the label comes first in the markup so screen readers read "label: value". */
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(0.75rem, 2vw, 1.5rem);
+    border-left: 1px solid var(--color-line);
+  }
+
+  /* Drop the divider on the first item of every row so the band lines up with the page edge. */
+  .stat:nth-child(odd) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  @media (min-width: 60rem) {
+    .stat:nth-child(odd) {
+      border-left: 1px solid var(--color-line);
+      padding-left: clamp(0.75rem, 2vw, 1.5rem);
+    }
+
+    .stat:first-child {
+      border-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  /* On phones the second row gets a top border so the four figures read as a grid. */
+  .stat:nth-child(n + 3) {
+    border-top: 1px solid var(--color-line);
+  }
+
+  @media (min-width: 60rem) {
+    .stat:nth-child(n + 3) {
+      border-top: 0;
+    }
+  }
+
+  dd {
+    margin: 0;
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--color-accent);
+  }
+
+  dt {
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+  }
+</style>
