@@ -7,7 +7,7 @@ export const defaultLang: Lang = 'tr';
 
 export const ui = {
   tr: {
-    'meta.title': 'COLAB | Kurumsal yazılım ve dijital dönüşüm',
+    'meta.title': 'COLAB | Kurumsal Yazılım ve Dijital Dönüşüm',
     'meta.description':
       'Satınalmadan e-imzaya, insan kaynaklarından dijital arşive; kurumlar ve organize sanayi bölgeleri için uyarlanabilir yazılımlar ve danışmanlık.',
     'brand.legalName': 'COLAB Bilişim ve Danışmanlık Hizmetleri',
@@ -141,8 +141,18 @@ export function trAblative(n: number): string {
   return `${n}'${suffix}`;
 }
 
+/**
+ * Prefixes a root-relative path with the site's base path, so links keep working
+ * when the site is served from a sub-folder such as the GitHub Pages preview.
+ */
+export function withBase(path = '/'): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const clean = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${clean}`;
+}
+
 /** Builds a path for the given language. Turkish lives at the root, English under /en. */
 export function localePath(lang: Lang, path = '/'): string {
   const clean = path.startsWith('/') ? path : `/${path}`;
-  return lang === defaultLang ? clean : `/${lang}${clean === '/' ? '/' : clean}`;
+  return withBase(lang === defaultLang ? clean : `/${lang}${clean === '/' ? '/' : clean}`);
 }

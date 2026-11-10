@@ -1,0 +1,44 @@
+# Builds the site and publishes it to GitHub Pages on every push to main.
+# This is a preview of the new site, so it is served under /colab-website and hidden from search engines.
+name: Deploy preview to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Allows a manual redeploy from the Actions tab without pushing a commit.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment runs at a time, and one that has already started is allowed to finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Build the site with Astro
+        uses: withastro/action@v6
+        env:
+          SITE_URL: https://tunahantarhan.github.io
+          BASE_PATH: /colab-website
+          PUBLIC_NOINDEX: 'true'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

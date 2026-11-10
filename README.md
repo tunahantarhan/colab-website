@@ -12,6 +12,19 @@ npm run build    # static output in dist/
 npm run preview  # serve the production build locally
 ```
 
+## Deployment
+
+Every push to `main` publishes a preview to GitHub Pages through `.github/workflows/deploy.yml`:
+https://tunahantarhan.github.io/colab-website/
+
+The preview build sets three environment variables. Leave them unset to build for the real domain.
+
+| Variable | Preview value | Purpose |
+|---|---|---|
+| `SITE_URL` | `https://tunahantarhan.github.io` | Origin used for canonical and hreflang URLs |
+| `BASE_PATH` | `/colab-website` | Sub-folder the site is served from |
+| `PUBLIC_NOINDEX` | `true` | Keeps search engines from indexing the preview |
+
 ## Where things live
 
 | Path | What it holds |
