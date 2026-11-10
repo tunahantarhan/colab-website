@@ -10,7 +10,6 @@ export const ui = {
     'meta.title': 'COLAB | Kurumsal yazılım ve dijital dönüşüm',
     'meta.description':
       'Satınalmadan e-imzaya, insan kaynaklarından dijital arşive; kurumlar ve organize sanayi bölgeleri için uyarlanabilir yazılımlar ve danışmanlık.',
-    'brand.tagline': 'Bilişim ve Danışmanlık',
     'brand.legalName': 'COLAB Bilişim ve Danışmanlık Hizmetleri',
 
     'nav.products': 'Ürünler',
@@ -61,7 +60,6 @@ export const ui = {
     'meta.title': 'COLAB | Enterprise software and digital transformation',
     'meta.description':
       'From procurement to e-signature, HR to digital archiving: adaptable software and consulting for companies and organised industrial zones.',
-    'brand.tagline': 'IT & Consulting',
     'brand.legalName': 'COLAB IT and Consulting Services',
 
     'nav.products': 'Products',

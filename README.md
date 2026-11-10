@@ -24,7 +24,7 @@ npm run preview  # serve the production build locally
 
 ## Still placeholders
 
-- The logo is a text wordmark (`src/components/Logo.astro`).
+- The logo is the PNG from the old site (`src/assets/brand/colab-logo.png`); replace it with an SVG when one is available.
 - Product screenshots are grey boxes, and the project and user counts in the figures band show `[X]+`.
 - The founding year (`foundedYear` in `src/data/site.ts`) is assumed to be 2016 until it is confirmed.
 - Product detail pages, the About page, the contact form and the KVKK and cookie pages are not built yet, so their links point to `#`.

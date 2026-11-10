@@ -18,7 +18,7 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="top">
       <div class="brand">
-        <Logo lang={lang} compact />
+        <Logo lang={lang} height={36} />
         <p>{t('brand.legalName')}</p>
       </div>
 
@@ -73,10 +73,12 @@ const year = new Date().getFullYear();
     }
   }
 
+  /* flex-start keeps the logo link only as wide as the logo instead of stretching across the column. */
   .brand {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
   .brand p {

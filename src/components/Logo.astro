@@ -1,48 +1,42 @@
 ---
-// A text wordmark that stands in for the real logo. Replace the markup with the SVG once we receive it.
-import { type Lang, localePath, useTranslations } from '../i18n/ui';
+// The COLAB logo, linking back to the home page.
+// The source is the large PNG from the old site; Astro resizes it at build time and serves WebP,
+// so visitors only download a small file. Swap in an SVG here once the company provides one.
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/colab-logo.png';
+import { type Lang, localePath } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
-  /** The footer shows the wordmark without the tagline underneath. */
-  compact?: boolean;
+  /** Rendered height in pixels on desktop; phones get a slightly smaller logo through CSS. */
+  height?: number;
 }
 
-const { lang, compact = false } = Astro.props;
-const t = useTranslations(lang);
+const { lang, height = 40 } = Astro.props;
+// Keep the original aspect ratio so the image never looks squashed.
+const width = Math.round((logo.width / logo.height) * height);
 ---
 
-<a class="logo" href={localePath(lang, '/')} aria-label={`COLAB, ${t('brand.tagline')}`}>
-  <span class="wordmark">COLAB<span class="dot">.</span></span>
-  {!compact && <span class="tagline">{t('brand.tagline')}</span>}
+<a class="logo" href={localePath(lang, '/')} style={`--logo-height: ${height}px`}>
+  <!-- 1x and 2x versions are generated so the logo stays sharp on retina screens. -->
+  <Image src={logo} alt="COLAB" width={width} height={height} densities={[1, 2]} format="webp" loading="eager" />
 </a>
 
 <style>
   .logo {
     display: inline-flex;
-    flex-direction: column;
-    line-height: 1.1;
-    color: var(--color-ink);
+    align-items: center;
+    flex-shrink: 0;
   }
 
-  .logo:hover {
-    color: var(--color-ink);
+  .logo img {
+    width: auto;
+    height: calc(var(--logo-height) * 0.85);
   }
 
-  .wordmark {
-    font-size: 1.375rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-  }
-
-  /* The dot borrows the green from the logo, while links and buttons use the teal accent. */
-  .dot {
-    color: var(--color-accent-2);
-  }
-
-  .tagline {
-    font-size: 0.75rem;
-    color: var(--color-muted);
-    letter-spacing: 0.02em;
+  @media (min-width: 60rem) {
+    .logo img {
+      height: var(--logo-height);
+    }
   }
 </style>
