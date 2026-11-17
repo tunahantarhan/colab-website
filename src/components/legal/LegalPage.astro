@@ -1,0 +1,145 @@
+---
+// A plain, readable layout for legal texts such as the KVKK notice.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { LegalDocument } from '../../data/legal/kvkk';
+import { type Lang, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** The page path without the language prefix, e.g. "/kvkk/". */
+  path: string;
+  doc: LegalDocument;
+}
+
+const { lang, path, doc } = Astro.props;
+const t = useTranslations(lang);
+
+// Splits a sentence so that "[...]" placeholders can be highlighted; that makes missing details easy to spot.
+const parts = (text: string) =>
+  text.split(/(\[[^\]]+\])/).map((part) => ({ text: part, missing: /^\[[^\]]+\]$/.test(part) }));
+---
+
+<BaseLayout lang={lang} path={path} title={`${doc.title} | COLAB`} description={doc.intro}>
+  <article class="section">
+    <div class="container narrow">
+      {
+        doc.draft && (
+          <p class="draft" role="note">
+            {t('legal.draftNotice')}
+          </p>
+        )
+      }
+
+      <h1>{doc.title}</h1>
+      <p class="intro">{doc.intro}</p>
+
+      {
+        doc.sections.map((section) => (
+          <section>
+            <h2>{section.heading}</h2>
+            {section.paragraphs?.map((p) => (
+              <p>{parts(p).map((x) => (x.missing ? <mark>{x.text}</mark> : x.text))}</p>
+            ))}
+            {section.list && (
+              <ul>
+                {section.list.map((item) => (
+                  <li>{parts(item).map((x) => (x.missing ? <mark>{x.text}</mark> : x.text))}</li>
+                ))}
+              </ul>
+            )}
+            {section.after?.map((p) => (
+              <p>{parts(p).map((x) => (x.missing ? <mark>{x.text}</mark> : x.text))}</p>
+            ))}
+          </section>
+        ))
+      }
+
+      <p class="updated">
+        {t('legal.updated')}: {parts(doc.updated).map((x) => (x.missing ? <mark>{x.text}</mark> : x.text))}
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /*
+    Legal text reads best in a narrow column, around 70 characters per line.
+    Ligatures are switched off because Manrope turns "(c)" into "©", which would garble clause references like "(c)".
+  */
+  .narrow {
+    max-width: 48rem;
+    font-variant-ligatures: none;
+    font-feature-settings: 'liga' 0, 'calt' 0, 'dlig' 0;
+  }
+
+  .draft {
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e0b100;
+    border-radius: var(--radius-md);
+    background: #fff8db;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .intro {
+    margin-top: 1.25rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  section {
+    margin-top: 2.5rem;
+  }
+
+  h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  section p,
+  li {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  section p + p,
+  ul + p {
+    margin-top: 0.75rem;
+  }
+
+  ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+  }
+
+  li + li {
+    margin-top: 0.4rem;
+  }
+
+  mark {
+    padding: 0 0.2em;
+    border-radius: 3px;
+    background: #fff1a8;
+    color: var(--color-ink);
+  }
+
+  .updated {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+</style>

@@ -43,10 +43,13 @@ const year = new Date().getFullYear();
 
     <div class="bottom">
       <span>© {year} {t('brand.legalName')}</span>
-      <!-- The legal pages are still to be written; these links will point at them. -->
+      <!--
+        The site sets no cookies, so a short statement replaces a cookie policy.
+        If cookies are ever added (analytics, embeds, chat widgets), this must become a link to a cookie policy page.
+      -->
       <span class="legal">
-        <a href="#">{t('footer.kvkk')}</a>
-        <a href="#">{t('footer.cookies')}</a>
+        <a href={localePath(lang, '/kvkk/')}>{t('footer.kvkk')}</a>
+        <span>{t('footer.noCookies')}</span>
       </span>
     </div>
   </div>

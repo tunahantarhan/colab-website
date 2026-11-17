@@ -54,7 +54,10 @@ export const ui = {
     'footer.pages': 'Sayfalar',
     'footer.address': 'Adres',
     'footer.kvkk': 'KVKK Aydınlatma Metni',
-    'footer.cookies': 'Çerez Politikası',
+    'footer.noCookies': 'Sitemiz çerez kullanmamaktadır.',
+
+    'legal.draftNotice': 'Taslak: Bu metin hukuki kontrolden geçtikten sonra yayına alınacaktır. Sarı ile işaretli alanlar doldurulacaktır.',
+    'legal.updated': 'Son güncelleme',
   },
   en: {
     'meta.title': 'COLAB | Enterprise software and digital transformation',
@@ -104,7 +107,10 @@ export const ui = {
     'footer.pages': 'Pages',
     'footer.address': 'Address',
     'footer.kvkk': 'Privacy Notice',
-    'footer.cookies': 'Cookie Policy',
+    'footer.noCookies': 'This website does not use cookies.',
+
+    'legal.draftNotice': 'Draft: this text will be published after legal review. Fields highlighted in yellow are still to be filled in.',
+    'legal.updated': 'Last updated',
   },
 } as const;
 
