@@ -1,0 +1,489 @@
+---
+// The product detail page. Both language routes render this component; the copy comes from src/data/product-details.
+// Sections without content (e.g. a product with no modules) are simply left out.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { type Product, detailedProducts, productPath, productPaths } from '../../data/products';
+import type { ProductDetail } from '../../data/product-details/types';
+import { startClosing, startSteps } from '../../data/product-details/start';
+import { company } from '../../data/site';
+import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  product: Product & { detail: Record<Lang, ProductDetail> };
+}
+
+const { lang, product } = Astro.props;
+const t = useTranslations(lang);
+const d = product.detail[lang];
+const name = product.name[lang];
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+
+// There is no contact form, so the call to action starts an email with the product already in the subject.
+const ctaHref = `mailto:${company.email}?subject=${encodeURIComponent(t('product.ctaSubject', { product: name }))}`;
+const start = startSteps.map((step) => ({
+  value: step.value[lang],
+  title: step.title[lang],
+  text: d.start?.[step.id] ?? step.text[lang],
+}));
+const others = detailedProducts.filter((p) => p.slug !== product.slug);
+const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
+---
+
+<BaseLayout lang={lang} path={productPaths(product.slug)} title={`${name} | COLAB`} description={d.tagline}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <nav class="crumbs" aria-label={t('nav.products')}>
+          <a href={allProducts}>{t('nav.products')}</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{name}</span>
+        </nav>
+        {d.kicker && <p class="eyebrow">{d.kicker}</p>}
+        <h1>{name}</h1>
+        <p class="tagline">{d.tagline}</p>
+        <div class="buttons">
+          <a class="btn btn-accent" href={ctaHref}>{t('product.cta')}</a>
+          <a class="btn btn-outline" href={company.phoneHref}>{company.phone}</a>
+        </div>
+      </div>
+      <div class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}: {name}]</div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="problem-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="problem-title">{t('product.problem')}</h2>
+      <div class="prose">
+        {d.problem.map((p, i) => <p class={i === 0 ? 'lead' : undefined}>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  {
+    d.solution && (
+      <section class="section tight" aria-labelledby="solution-title">
+        <div class="container section-grid">
+          <h2 class="eyebrow" id="solution-title">{t('product.solution')}</h2>
+          <div class="prose">
+            {d.solution.map((p) => <p>{p}</p>)}
+            {d.note && <p class="note">{d.note}</p>}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    d.steps && (
+      <section class="section soft" aria-labelledby="steps-title">
+        <div class="container section-grid">
+          <h2 class="eyebrow" id="steps-title">{t('product.steps')}</h2>
+          <ol class="steps">
+            {d.steps.map((step, i) => (
+              <li>
+                <span class="no">{pad(i)}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    d.modules && (
+      <section class="section" aria-labelledby="modules-title">
+        <div class="container section-grid">
+          <h2 class="eyebrow" id="modules-title">{t('product.modules')}</h2>
+          <ul class="modules">
+            {d.modules.map((m) => (
+              <li>
+                <h3>{m.title}</h3>
+                <p>{m.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section dark" aria-labelledby="gains-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="gains-title">{t('product.gains')}</h2>
+      <!-- As in the figures band, the label comes first in the markup so screen readers read "label: value". -->
+      <dl class="gains">
+        {
+          d.gains.map((g) => (
+            <div>
+              <dt>{g.label}</dt>
+              <dd>{g.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="start-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="start-title">{t('product.start')}</h2>
+      <div class="start">
+        <ol class="start-steps">
+          {
+            start.map((s) => (
+              <li>
+                <p class="figure">
+                  <strong>{s.value}</strong> {s.title}
+                </p>
+                <p>{s.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="closing">{d.closing ?? startClosing[lang]}</p>
+        <div class="buttons">
+          <a class="btn btn-accent" href={ctaHref}>{t('product.cta')}</a>
+          <a class="btn btn-outline" href={company.phoneHref}>{company.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    others.length > 0 && (
+      <section class="section soft" aria-labelledby="others-title">
+        <div class="container section-grid">
+          <h2 class="eyebrow" id="others-title">{t('product.others')}</h2>
+          <div>
+            <ul class="others">
+              {others.map((p) => (
+                <li>
+                  <a href={localePath(lang, productPath(lang, p.slug))}>
+                    <span class="other-name">{p.name[lang]}</span>
+                    <span class="other-summary">{p.summary[lang]}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a class="all" href={allProducts}>{t('product.all')}</a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 30rem) {
+    .buttons .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  /* Hero: text and screenshot stack on phones and sit side by side on desktop. */
+  .hero {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 60rem) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 4rem;
+    }
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .crumbs a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+
+  .tagline {
+    max-width: 34rem;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  .hero .buttons {
+    margin-top: 0.5rem;
+  }
+
+  .shot {
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+  }
+
+  /* Running text: one comfortable column, the opening sentence larger. */
+  .tight {
+    padding-top: 0;
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 44rem;
+  }
+
+  .prose p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .prose .lead {
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    line-height: 1.45;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+  }
+
+  .note {
+    margin-top: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--color-accent-2);
+    background: var(--color-soft);
+    font-weight: 600;
+  }
+
+  .prose .note {
+    color: var(--color-ink);
+  }
+
+  .soft {
+    background: var(--color-soft);
+  }
+
+  /* Steps: one per row on phones, then as many columns as fit. */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 1.5rem;
+    counter-reset: step;
+  }
+
+  .steps li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-ink);
+  }
+
+  .no {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  h3 {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .steps p,
+  .modules p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  .modules li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+  }
+
+  /* Gains: the results sit on the black band so the numbers stand out, as on the home page's About section. */
+  .dark {
+    background: var(--color-ink);
+    color: #ffffff;
+  }
+
+  .dark .eyebrow {
+    color: var(--color-accent-on-dark);
+  }
+
+  .gains {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 2rem 2.5rem;
+    margin: 0;
+  }
+
+  .gains div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .gains dd {
+    margin: 0;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--color-accent-on-dark);
+  }
+
+  .gains dt {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* How we start: three short promises, then the closing call to action. */
+  .start {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 0;
+  }
+
+  .start-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 1.5rem;
+  }
+
+  .start-steps li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .start-steps p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .start-steps .figure {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .figure strong {
+    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-accent);
+  }
+
+  .closing {
+    max-width: 40rem;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* Other products: the same numbered-list look as the home page. */
+  .others {
+    border-top: 1px solid var(--color-ink);
+  }
+
+  .others a {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .other-name {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    transition: color 0.15s ease;
+  }
+
+  .others a:hover {
+    color: var(--color-ink);
+  }
+
+  .others a:hover .other-name {
+    color: var(--color-accent);
+  }
+
+  .other-summary {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .others a {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: 2rem;
+      align-items: baseline;
+    }
+  }
+
+  .all {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

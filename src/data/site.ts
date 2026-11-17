@@ -1,4 +1,5 @@
 import { type Lang, trAblative } from '../i18n/ui';
+import { products } from './products';
 
 // Company facts that are the same in every language.
 // When a CMS is added later, this is the file it should take over.
@@ -41,7 +42,7 @@ export const stats: Stat[] = [
     value: `${yearsActive}+`,
     label: { tr: `yıllık deneyim, ${foundingVars.yearFrom} beri`, en: `years of experience, since ${company.foundedYear}` },
   },
-  { value: '10', label: { tr: 'kurumsal ürün', en: 'enterprise products' } },
+  { value: String(products.length), label: { tr: 'kurumsal ürün', en: 'enterprise products' } },
   { value: '[X]+', label: { tr: 'tamamlanan proje', en: 'projects delivered' } },
   { value: '[X]+', label: { tr: 'aktif kullanıcı', en: 'active users' } },
 ];

@@ -40,6 +40,7 @@ The preview build sets three environment variables. Leave them unset to build fo
 - The logo is the PNG from the old site (`src/assets/brand/colab-logo.png`); replace it with an SVG when one is available.
 - Product screenshots are grey boxes, and the project and user counts in the figures band show `[X]+`.
 - The founding year (`foundedYear` in `src/data/site.ts`) is assumed to be 2016 until it is confirmed.
-- Product detail pages and the About page are not built yet, so their links point to `#`.
+- The About page is not built yet, so its link points to `#`.
+- Only products with copy in `src/data/product-details/` have a detail page (`/urunler/<slug>/`, `/en/products/<slug>/`); the others are listed without a link. The English product copy is a first translation and needs review.
 - The KVKK notice (`src/data/legal/kvkk.ts`) is a draft awaiting legal review; set `draft: false` once it is approved.
 - There is no cookie policy because the site sets no cookies. Adding analytics, embeds or anything else that sets cookies requires a cookie policy page and, for non-essential cookies, a consent banner.

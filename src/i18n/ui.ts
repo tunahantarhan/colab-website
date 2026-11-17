@@ -33,9 +33,20 @@ export const ui = {
     'stats.title': 'Rakamlarla COLAB',
 
     'products.label': 'Ürünler',
-    'products.title': 'Kurumunuza göre uyarlanan on uygulama.',
+    'products.title': 'Kurumunuza göre uyarlanan {count} uygulama.',
     'products.lead': 'Hepsi mobil uyumlu, birbiriyle entegre çalışır.',
     'products.screenshot': 'Ekran görüntüsü',
+
+    'product.problem': 'Sorun',
+    'product.solution': 'Çözüm',
+    'product.steps': 'Nasıl çalışır?',
+    'product.modules': 'Modüller',
+    'product.gains': 'Ne kazanırsınız?',
+    'product.start': 'Nasıl başlıyoruz?',
+    'product.cta': 'Analiz talep edin',
+    'product.ctaSubject': 'Analiz talebi: {product}',
+    'product.others': 'Diğer ürünler',
+    'product.all': 'Tüm ürünler',
 
     'services.label': 'Hizmetler',
     'services.title': 'Analizden canlıya alıma kadar yanınızdayız.',
@@ -86,9 +97,20 @@ export const ui = {
     'stats.title': 'COLAB in numbers',
 
     'products.label': 'Products',
-    'products.title': 'Ten applications tailored to your organisation.',
+    'products.title': '{count} applications tailored to your organisation.',
     'products.lead': 'All of them work on mobile and integrate with each other.',
     'products.screenshot': 'Screenshot',
+
+    'product.problem': 'The problem',
+    'product.solution': 'Our solution',
+    'product.steps': 'How it works',
+    'product.modules': 'Modules',
+    'product.gains': 'What you gain',
+    'product.start': 'How we get started',
+    'product.cta': 'Request an analysis',
+    'product.ctaSubject': 'Analysis request: {product}',
+    'product.others': 'Other products',
+    'product.all': 'All products',
 
     'services.label': 'Services',
     'services.title': 'With you from analysis to go-live.',
@@ -155,6 +177,17 @@ export function withBase(path = '/'): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   const clean = path.startsWith('/') ? path : `/${path}`;
   return `${base}${clean}`;
+}
+
+/**
+ * A page path without the language prefix. Most pages share one path in both languages ("/kvkk/");
+ * pages whose URL is translated (e.g. /urunler/... and /en/products/...) pass one path per language.
+ */
+export type PagePath = string | Record<Lang, string>;
+
+/** Picks the path for one language from a PagePath. */
+export function pathFor(path: PagePath, lang: Lang): string {
+  return typeof path === 'string' ? path : path[lang];
 }
 
 /** Builds a path for the given language. Turkish lives at the root, English under /en. */

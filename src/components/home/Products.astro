@@ -1,6 +1,6 @@
 ---
-import { products } from '../../data/products';
-import { type Lang, sectionIds, useTranslations } from '../../i18n/ui';
+import { productPath, products } from '../../data/products';
+import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -11,18 +11,16 @@ const t = useTranslations(lang);
 
 // Numbers run across both groups, so the list continues where the featured cards stop.
 const numbered = products.map((product, index) => ({ ...product, no: String(index + 1).padStart(2, '0') }));
-const featured = numbered.filter((p) => p.featured);
-const rest = numbered.filter((p) => !p.featured);
-
-// Product detail pages don't exist yet, so the links stay as "#" for now.
-const productHref = (_slug: string) => '#';
+// Products with a detail page get a card with a screenshot; the others wait in the list until their copy arrives.
+const featured = numbered.filter((p) => p.detail);
+const rest = numbered.filter((p) => !p.detail);
 ---
 
 <section class="section" id={sectionIds[lang].products} aria-labelledby="products-title">
   <div class="container section-grid">
     <div class="section-intro">
       <p class="eyebrow">{t('products.label')}</p>
-      <h2 class="section-title" id="products-title">{t('products.title')}</h2>
+      <h2 class="section-title" id="products-title">{t('products.title', { count: products.length })}</h2>
       <p class="muted">{t('products.lead')}</p>
     </div>
 
@@ -31,7 +29,7 @@ const productHref = (_slug: string) => '#';
         {
           featured.map((p) => (
             <li>
-              <a class="card" href={productHref(p.slug)}>
+              <a class="card" href={localePath(lang, productPath(lang, p.slug))}>
                 <span class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}]</span>
                 <span class="card-body">
                   <span class="no">{p.no}</span>
@@ -48,11 +46,11 @@ const productHref = (_slug: string) => '#';
         {
           rest.map((p) => (
             <li>
-              <a class="item" href={productHref(p.slug)}>
+              <div class="item">
                 <span class="no">{p.no}</span>
                 <h3 class="item-title">{p.name[lang]}</h3>
                 <span class="summary">{p.summary[lang]}</span>
-              </a>
+              </div>
             </li>
           ))
         }
@@ -157,14 +155,6 @@ const productHref = (_slug: string) => '#';
     color: var(--color-ink);
   }
 
-  .item:hover {
-    color: var(--color-ink);
-  }
-
-  .item:hover .item-title {
-    color: var(--color-accent);
-  }
-
   .item .no {
     grid-area: no;
   }
@@ -174,7 +164,6 @@ const productHref = (_slug: string) => '#';
     font-size: clamp(1.1875rem, 1rem + 0.6vw, 1.375rem);
     font-weight: 700;
     letter-spacing: -0.02em;
-    transition: color 0.15s ease;
   }
 
   .item .summary {

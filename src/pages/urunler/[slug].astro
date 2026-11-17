@@ -1,0 +1,13 @@
+---
+import ProductPage from '../../components/product/ProductPage.astro';
+import { detailedProducts } from '../../data/products';
+
+// One page per product that has detail copy; the rest have no page yet.
+export function getStaticPaths() {
+  return detailedProducts.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+---
+
+<ProductPage lang="tr" product={product} />
