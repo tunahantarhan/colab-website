@@ -11,7 +11,8 @@ export const company = {
   phone: '+90 549 686 26 00',
   // The tel: link needs the number without spaces.
   phoneHref: 'tel:+905496862600',
-  addressLines: ['Veko Giz Plaza No:83, Meydan Sk.', 'Maslak, Sarıyer / İstanbul'],
+  // Shown on two lines in the footer and joined into one line in running text such as the KVKK notice.
+  addressLines: ['Esentepe Mahallesi, Büyükdere Caddesi, No: 199', '(Levent 199 Yan Giriş), Şişli / İstanbul'],
   linkedin: 'https://www.linkedin.com/company/colab-bilisim-ve-danismanlik-hizmetleri/',
 };
 
