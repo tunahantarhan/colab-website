@@ -1,7 +1,8 @@
 import type { Lang } from '../../i18n/ui';
 import type { ProductDetail } from './types';
 
-// Source: Ahmet Paçacı's product copy (16.11.2026). A new product that was not on the old site.
+// Source: Ahmet Paçacı's product copy (16.11.2026). On 17.11.2026 he merged the old site's
+// "OSB İş ve Süreç Yönetimi" and "İş Yönetimi" into this product, as they are the same system.
 
 export const sahaYonetimi: Record<Lang, ProductDetail> = {
   tr: {

@@ -66,14 +66,6 @@ export const products: Product[] = [
     detail: sahaYonetimi,
   },
   {
-    slug: 'osb-surec-yonetimi',
-    name: { tr: 'OSB İş ve Süreç Yönetimi', en: 'OIZ Business and Process Management' },
-    summary: {
-      tr: 'Organize sanayi bölgeleri için iş ve süreç yönetimi.',
-      en: 'Business and process management for organised industrial zones.',
-    },
-  },
-  {
     slug: 'insan-kaynaklari',
     name: { tr: 'İnsan Kaynakları', en: 'Human Resources' },
     summary: { tr: 'Personel süreçleri tek yerde.', en: 'All personnel processes in one place.' },
@@ -87,11 +79,6 @@ export const products: Product[] = [
     slug: 'crm',
     name: { tr: 'CRM', en: 'CRM' },
     summary: { tr: 'Müşteri ilişkileri ve satış takibi.', en: 'Customer relationships and sales tracking.' },
-  },
-  {
-    slug: 'is-yonetimi',
-    name: { tr: 'İş Yönetimi', en: 'Work Management' },
-    summary: { tr: 'Görev ve süreç takibi.', en: 'Task and process tracking.' },
   },
   {
     slug: 'kalite-yonetimi',

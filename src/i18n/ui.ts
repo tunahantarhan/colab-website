@@ -28,7 +28,7 @@ export const ui = {
       'Satınalmadan e-imzaya, insan kaynaklarından dijital arşive; kurumların ve organize sanayi bölgelerinin ihtiyacına göre geliştirilen hazır ve uyarlanabilir yazılımlar.',
     'hero.primary': 'Ürünleri inceleyin',
     'hero.secondary': 'Görüşme planlayın',
-    'hero.screenshot': 'OSB İş ve Süreç Yönetimi paneli ekran görüntüsü',
+    'hero.screenshot': 'Saha Yönetimi paneli ekran görüntüsü',
 
     'stats.title': 'Rakamlarla COLAB',
 
@@ -92,7 +92,7 @@ export const ui = {
       'From procurement to e-signature, HR to digital archiving: ready-to-use, adaptable software built for companies and organised industrial zones.',
     'hero.primary': 'Explore products',
     'hero.secondary': 'Book a meeting',
-    'hero.screenshot': 'Screenshot of the OIZ Business and Process Management dashboard',
+    'hero.screenshot': 'Screenshot of the Field Operations dashboard',
 
     'stats.title': 'COLAB in numbers',
 
