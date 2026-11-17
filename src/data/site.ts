@@ -5,9 +5,10 @@ import { products } from './products';
 // When a CMS is added later, this is the file it should take over.
 
 export const company = {
-  // The registered trade name, as given by management on 17.11.2026; to be confirmed against the trade registry
-  // together with the MERSIS number. The brand name in the footer (brand.legalName) is a separate, longer form.
-  tradeName: 'COLAB Bilişim Hizmetleri Ltd. Şti.',
+  // The registered trade name and MERSIS number, from the Istanbul trade registry record.
+  // The brand name in the footer (brand.legalName) is a separate, longer form.
+  tradeName: 'COLAB Bilişim Hizmetleri Limited Şirketi',
+  mersis: '0211070547400012',
   // NOT CONFIRMED YET: management describes COLAB as a ten-year-old company, so 2016 is a stand-in.
   // Every "since ..." and "... years" on the site is derived from this one value.
   foundedYear: 2016,

@@ -41,7 +41,7 @@ export const kvkkNotice: Record<Lang, LegalDocument> = {
           `Unvan: ${company.tradeName}`,
           `Adres: ${address}`,
           `E-posta: ${company.email}`,
-          'MERSİS numarası: [MERSİS numarası]',
+          `MERSİS numarası: ${company.mersis}`,
         ],
       },
       {
@@ -127,7 +127,7 @@ export const kvkkNotice: Record<Lang, LegalDocument> = {
           `Company name: ${company.tradeName}`,
           `Address: ${address}`,
           `Email: ${company.email}`,
-          'MERSIS number: [MERSIS number]',
+          `MERSIS number: ${company.mersis}`,
         ],
       },
       {
