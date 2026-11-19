@@ -2,6 +2,7 @@
 import Logo from './Logo.astro';
 import { company } from '../data/site';
 import { aboutPaths } from '../data/about';
+import { consulting, consultingPaths } from '../data/consulting';
 import { type Lang, localePath, sectionIds, useTranslations } from '../i18n/ui';
 
 interface Props {
@@ -27,6 +28,7 @@ const year = new Date().getFullYear();
         <h2 id="footer-pages">{t('footer.pages')}</h2>
         <a href={`${home}#${ids.products}`}>{t('nav.products')}</a>
         <a href={`${home}#${ids.services}`}>{t('nav.services')}</a>
+        <a href={localePath(lang, consultingPaths[lang])}>{consulting[lang].name}</a>
         <a href={localePath(lang, aboutPaths[lang])}>{t('nav.about')}</a>
         <a href={`${home}#${ids.contact}`}>{t('nav.contact')}</a>
       </nav>

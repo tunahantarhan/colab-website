@@ -1,0 +1,307 @@
+---
+// The consulting page. Both language routes render this component; the copy lives in src/data/consulting.ts.
+// It follows the product pages' rhythm (approach, steps, what you gain, how we start) so the site reads as one piece.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StartSection from '../StartSection.astro';
+import { consulting, consultingPaths } from '../../data/consulting';
+import { company } from '../../data/site';
+import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const c = consulting[lang];
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+const services = `${localePath(lang, '/')}#${sectionIds[lang].services}`;
+const ctaHref = `mailto:${company.email}?subject=${encodeURIComponent(t('product.ctaSubject', { product: c.name }))}`;
+---
+
+<BaseLayout lang={lang} path={consultingPaths} title={`${c.name} | COLAB`} description={c.lead}>
+  <section class="hero">
+    <div class="container">
+      <nav class="crumbs" aria-label={t('nav.services')}>
+        <a href={services}>{t('nav.services')}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{c.name}</span>
+      </nav>
+      <p class="eyebrow">{c.kicker}</p>
+      <h1>{c.title}</h1>
+      <p class="lead">{c.lead}</p>
+      <div class="buttons">
+        <a class="btn btn-accent" href={ctaHref}>{t('product.cta')}</a>
+        <a class="btn btn-outline" href={company.phoneHref}>{company.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="approach-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="approach-title">{c.approachLabel}</h2>
+      <div class="prose">
+        {c.approach.map((p, i) => <p class={i === 0 ? 'first' : undefined}>{p}</p>)}
+        <p class="note">{c.approachNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" aria-labelledby="steps-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="steps-title">{c.stepsLabel}</h2>
+      <ol class="steps">
+        {
+          c.steps.map((step, i) => (
+            <li>
+              <span class="no">{pad(i)}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="topics-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="topics-title">{c.topicsLabel}</h2>
+      <ul class="topics">
+        {c.topics.map((topic) => <li>{topic}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section dark" aria-labelledby="gains-title">
+    <div class="container section-grid">
+      <h2 class="eyebrow" id="gains-title">{t('product.gains')}</h2>
+      <div class="gains-wrap">
+        {/* As on the product pages, the label comes first in the markup so screen readers read "label: value". */}
+        <dl class="gains">
+          {
+            c.gains.map((g) => (
+              <div>
+                <dt>{g.label}</dt>
+                <dd>{g.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="motto">{c.motto}</p>
+      </div>
+    </div>
+  </section>
+
+  <StartSection lang={lang} ctaHref={ctaHref} overrides={c.start} closing={c.closing} />
+</BaseLayout>
+
+<style>
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero {
+    padding-block: clamp(3rem, 8vw, 6rem);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .hero .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .crumbs a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  h1 {
+    max-width: 20ch;
+    font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4.25rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+
+  .lead {
+    max-width: 38rem;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 30rem) {
+    .buttons .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 44rem;
+  }
+
+  .prose p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .prose .first {
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    line-height: 1.45;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+  }
+
+  .prose .note {
+    margin-top: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--color-accent-2);
+    background: var(--color-soft);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .soft {
+    background: var(--color-soft);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 1.5rem;
+  }
+
+  .steps li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-ink);
+  }
+
+  .no {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  h3 {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .steps p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  /* Fifteen short questions: a ruled two-column list on wider screens instead of fifteen cards. */
+  .topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    column-gap: 2.5rem;
+    border-top: 1px solid var(--color-ink);
+  }
+
+  .topics li {
+    position: relative;
+    padding: 0.9rem 0 0.9rem 1.5rem;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .topics li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.45rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
+
+  .dark {
+    background: var(--color-ink);
+    color: #ffffff;
+  }
+
+  .dark .eyebrow {
+    color: var(--color-accent-on-dark);
+  }
+
+  .gains-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  /* Four results read best as a two-by-two grid, so the columns are wide enough that a third never fits. */
+  .gains {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 2rem 2.5rem;
+    margin: 0;
+  }
+
+  .gains div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .gains dd {
+    margin: 0;
+    font-size: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-accent-on-dark);
+  }
+
+  .gains dt {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .motto {
+    max-width: 44rem;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    line-height: 1.4;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+</style>

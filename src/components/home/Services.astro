@@ -1,6 +1,9 @@
 ---
+// Consulting leads the section, since it is how every project starts; the service areas follow as cards.
+// The full consulting copy lives on its own page, linked from here.
+import { consulting, consultingPaths } from '../../data/consulting';
 import { services } from '../../data/services';
-import { type Lang, sectionIds, useTranslations } from '../../i18n/ui';
+import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -8,25 +11,48 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const c = consulting[lang];
+const pad = (n: number) => String(n + 1).padStart(2, '0');
 ---
 
 <section class="section services" id={sectionIds[lang].services} aria-labelledby="services-title">
   <div class="container section-grid">
     <div class="section-intro">
       <p class="eyebrow">{t('services.label')}</p>
-      <h2 class="section-title" id="services-title">{t('services.title')}</h2>
+      <h2 class="section-title" id="services-title">{c.title}</h2>
     </div>
 
-    <ul class="grid">
-      {
-        services.map((s) => (
-          <li class="card">
-            <h3>{s.name[lang]}</h3>
-            <p>{s.summary[lang]}</p>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="content">
+      <div class="consulting">
+        <p class="lead">{c.lead}</p>
+        <ol class="steps">
+          {
+            c.steps.map((step, i) => (
+              <li>
+                <span class="no">{pad(i)}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <a class="more" href={localePath(lang, consultingPaths[lang])}>{c.more} <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="areas">
+        <h3 class="areas-title">{t('services.areas')}</h3>
+        <ul class="grid">
+          {
+            services.map((s) => (
+              <li class="card">
+                <h4>{s.name[lang]}</h4>
+                <p>{s.summary[lang]}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -35,13 +61,95 @@ const t = useTranslations(lang);
     background: var(--color-soft);
   }
 
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+    min-width: 0;
+  }
+
+  .consulting {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .lead {
+    max-width: 44rem;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 1.5rem;
+  }
+
+  .steps li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-ink);
+  }
+
+  .no {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .steps h3 {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .steps p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .more {
+    align-self: flex-start;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .more:hover {
+    color: var(--color-accent);
+  }
+
+  .areas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .areas-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
     gap: 1.25rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
   /* The accent line on top ties the cards to the orange used elsewhere without adding icons we don't have yet. */
@@ -55,14 +163,14 @@ const t = useTranslations(lang);
     border-radius: var(--radius-md);
   }
 
-  h3 {
+  h4 {
     font-size: 1.25rem;
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: -0.015em;
   }
 
-  p {
+  .card p {
     font-size: 0.9375rem;
     line-height: 1.65;
     color: var(--color-text);

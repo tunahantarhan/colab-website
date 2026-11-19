@@ -49,7 +49,7 @@ export const ui = {
     'product.all': 'Tüm ürünler',
 
     'services.label': 'Hizmetler',
-    'services.title': 'Analizden canlıya alıma kadar yanınızdayız.',
+    'services.areas': 'Hizmet alanlarımız',
 
     'about.label': 'Hakkımızda',
     'about.statement':
@@ -114,7 +114,7 @@ export const ui = {
     'product.all': 'All products',
 
     'services.label': 'Services',
-    'services.title': 'With you from analysis to go-live.',
+    'services.areas': 'What we do',
 
     'about.label': 'About us',
     'about.statement':
