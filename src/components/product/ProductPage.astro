@@ -4,7 +4,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { type Product, detailedProducts, productPath, productPaths } from '../../data/products';
 import type { ProductDetail } from '../../data/product-details/types';
-import { startClosing, startSteps } from '../../data/product-details/start';
+import StartSection from '../StartSection.astro';
 import { company } from '../../data/site';
 import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
@@ -21,11 +21,6 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
 
 // There is no contact form, so the call to action starts an email with the product already in the subject.
 const ctaHref = `mailto:${company.email}?subject=${encodeURIComponent(t('product.ctaSubject', { product: name }))}`;
-const start = startSteps.map((step) => ({
-  value: step.value[lang],
-  title: step.title[lang],
-  text: d.start?.[step.id] ?? step.text[lang],
-}));
 const others = detailedProducts.filter((p) => p.slug !== product.slug);
 const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
 ---
@@ -130,30 +125,7 @@ const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
     )
   }
 
-  <section class="section" aria-labelledby="start-title">
-    <div class="container section-grid">
-      <h2 class="eyebrow" id="start-title">{t('product.start')}</h2>
-      <div class="start">
-        <ol class="start-steps">
-          {
-            start.map((s) => (
-              <li>
-                <p class="figure">
-                  <strong>{s.value}</strong> {s.title}
-                </p>
-                <p>{s.text}</p>
-              </li>
-            ))
-          }
-        </ol>
-        <p class="closing">{d.closing ?? startClosing[lang]}</p>
-        <div class="buttons">
-          <a class="btn btn-accent" href={ctaHref}>{t('product.cta')}</a>
-          <a class="btn btn-outline" href={company.phoneHref}>{company.phone}</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <StartSection lang={lang} ctaHref={ctaHref} overrides={d.start} closing={d.closing} />
 
   {
     others.length > 0 && (
@@ -393,52 +365,6 @@ const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
     font-size: 0.9375rem;
     line-height: 1.45;
     color: rgba(255, 255, 255, 0.75);
-  }
-
-  /* How we start: three short promises, then the closing call to action. */
-  .start {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    min-width: 0;
-  }
-
-  .start-steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-    gap: 1.5rem;
-  }
-
-  .start-steps li {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .start-steps p {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--color-text);
-  }
-
-  .start-steps .figure {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--color-ink);
-  }
-
-  .figure strong {
-    font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    color: var(--color-accent);
-  }
-
-  .closing {
-    max-width: 40rem;
-    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
-    line-height: 1.5;
-    font-weight: 600;
   }
 
   /* Other products: the same numbered-list look as the home page. */
