@@ -11,9 +11,10 @@ const t = useTranslations(lang);
 
 // Numbers run across both groups, so the list continues where the featured cards stop.
 const numbered = products.map((product, index) => ({ ...product, no: String(index + 1).padStart(2, '0') }));
-// Products with a detail page get a card with a screenshot; the others wait in the list until their copy arrives.
-const featured = numbered.filter((p) => p.detail);
-const rest = numbered.filter((p) => !p.detail);
+const featured = numbered.filter((p) => p.featured);
+const rest = numbered.filter((p) => !p.featured);
+// Only products with copy have a page; the others are shown as plain rows without a link.
+const href = (p: (typeof products)[number]) => (p.detail ? localePath(lang, productPath(lang, p.slug)) : undefined);
 ---
 
 <section class="section" id={sectionIds[lang].products} aria-labelledby="products-title">
@@ -29,7 +30,7 @@ const rest = numbered.filter((p) => !p.detail);
         {
           featured.map((p) => (
             <li>
-              <a class="card" href={localePath(lang, productPath(lang, p.slug))}>
+              <a class="card" href={href(p)}>
                 <span class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}]</span>
                 <span class="card-body">
                   <span class="no">{p.no}</span>
@@ -44,15 +45,18 @@ const rest = numbered.filter((p) => !p.detail);
 
       <ul class="list">
         {
-          rest.map((p) => (
-            <li>
-              <div class="item">
-                <span class="no">{p.no}</span>
-                <h3 class="item-title">{p.name[lang]}</h3>
-                <span class="summary">{p.summary[lang]}</span>
-              </div>
-            </li>
-          ))
+          rest.map((p) => {
+            const Row = p.detail ? 'a' : 'div';
+            return (
+              <li>
+                <Row class="item" href={href(p)}>
+                  <span class="no">{p.no}</span>
+                  <h3 class="item-title">{p.name[lang]}</h3>
+                  <span class="summary">{p.summary[lang]}</span>
+                </Row>
+              </li>
+            );
+          })
         }
       </ul>
     </div>
@@ -159,8 +163,17 @@ const rest = numbered.filter((p) => !p.detail);
     grid-area: no;
   }
 
+  a.item:hover {
+    color: var(--color-ink);
+  }
+
+  a.item:hover .item-title {
+    color: var(--color-accent);
+  }
+
   .item-title {
     grid-area: title;
+    transition: color 0.15s ease;
     font-size: clamp(1.1875rem, 1rem + 0.6vw, 1.375rem);
     font-weight: 700;
     letter-spacing: -0.02em;

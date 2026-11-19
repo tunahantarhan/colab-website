@@ -111,22 +111,24 @@ const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
     )
   }
 
-  <section class="section dark" aria-labelledby="gains-title">
-    <div class="container section-grid">
-      <h2 class="eyebrow" id="gains-title">{t('product.gains')}</h2>
-      <!-- As in the figures band, the label comes first in the markup so screen readers read "label: value". -->
-      <dl class="gains">
-        {
-          d.gains.map((g) => (
-            <div>
-              <dt>{g.label}</dt>
-              <dd>{g.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
-  </section>
+  {
+    d.gains && (
+      <section class="section dark" aria-labelledby="gains-title">
+        <div class="container section-grid">
+          <h2 class="eyebrow" id="gains-title">{t('product.gains')}</h2>
+          {/* As in the figures band, the label comes first in the markup so screen readers read "label: value". */}
+          <dl class="gains">
+            {d.gains.map((g) => (
+              <div>
+                <dt>{g.label}</dt>
+                <dd>{g.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    )
+  }
 
   <section class="section" aria-labelledby="start-title">
     <div class="container section-grid">

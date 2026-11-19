@@ -1,6 +1,7 @@
 ---
 import { foundingVars } from '../../data/site';
-import { type Lang, sectionIds, useTranslations } from '../../i18n/ui';
+import { aboutPaths } from '../../data/about';
+import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -22,8 +23,7 @@ const values = t('about.values').split('|');
       <ul class="values">
         {values.map((value) => <li>{value}</li>)}
       </ul>
-      <!-- There is no About page yet; point this at it once it exists. -->
-      <a class="more" href="#">{t('about.more')} <span aria-hidden="true">→</span></a>
+      <a class="more" href={localePath(lang, aboutPaths[lang])}>{t('about.more')} <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

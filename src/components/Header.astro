@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import { aboutPaths } from '../data/about';
 import { type Lang, type PagePath, localePath, pathFor, sectionIds, useTranslations } from '../i18n/ui';
 
 interface Props {
@@ -13,11 +14,11 @@ const ids = sectionIds[lang];
 const home = localePath(lang, '/');
 const otherLang: Lang = lang === 'tr' ? 'en' : 'tr';
 
-// The anchors point at the home page so the menu also works from future sub-pages.
+// The anchors point at the home page so the menu also works from sub-pages; About has a page of its own.
 const links = [
   { href: `${home}#${ids.products}`, label: t('nav.products') },
   { href: `${home}#${ids.services}`, label: t('nav.services') },
-  { href: `${home}#${ids.about}`, label: t('nav.about') },
+  { href: localePath(lang, aboutPaths[lang]), label: t('nav.about') },
   { href: `${home}#${ids.contact}`, label: t('nav.contact') },
 ];
 ---

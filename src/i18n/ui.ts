@@ -58,6 +58,7 @@ export const ui = {
       'Kurum içi süreçleri birbirine entegre ederken müşterileri, tedarikçileri ve bayileri de aynı sisteme dahil eden çözümler geliştiriyoruz.',
     'about.values': 'Müşteri odaklı|Dinamik|Yenilikçi|Araştırmacı',
     'about.more': 'Hikayemizi okuyun',
+    'aboutPage.since': '{yearFrom} beri',
 
     'contact.label': 'İletişim',
     'contact.lead': 'İhtiyacınızı dinleyelim, size uygun ürünü veya çözümü birlikte belirleyelim.',
@@ -122,6 +123,7 @@ export const ui = {
       'We build solutions that connect internal processes and bring customers, suppliers and dealers into the same system.',
     'about.values': 'Customer-focused|Dynamic|Innovative|Research-driven',
     'about.more': 'Read our story',
+    'aboutPage.since': 'since {year}',
 
     'contact.label': 'Contact',
     'contact.lead': "Tell us what you need and we'll find the right product or solution together.",

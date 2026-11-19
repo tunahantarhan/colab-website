@@ -1,6 +1,6 @@
 // The shape of a product detail page. Every page follows the same story:
 // tagline → problem → solution → how it works → modules → what you gain → how we start.
-// Only the tagline, problem and gains are required, so a product with short copy still gets a complete page.
+// Only the tagline and problem are required, so a product with short copy still gets a complete page.
 
 export type StartStepId = 'analysis' | 'setup' | 'support';
 
@@ -31,7 +31,8 @@ export interface ProductDetail {
   steps?: TitledText[];
   /** The parts the product is built from, shown as cards. */
   modules?: TitledText[];
-  gains: Gain[];
+  /** Measurable results; the black "what you gain" band is left out when there are none. */
+  gains?: Gain[];
   /** Rewords individual "how we start" steps; any step left out uses the shared text from start.ts. */
   start?: Partial<Record<StartStepId, string>>;
   /** Overrides the closing call to action under "how we start". */
