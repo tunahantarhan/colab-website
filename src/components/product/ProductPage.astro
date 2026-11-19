@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { type Product, detailedProducts, productPath, productPaths } from '../../data/products';
 import type { ProductDetail } from '../../data/product-details/types';
 import StartSection from '../StartSection.astro';
-import { company } from '../../data/site';
+import { company, showScreenshots } from '../../data/site';
 import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
 interface Props {
@@ -27,7 +27,7 @@ const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
 
 <BaseLayout lang={lang} path={productPaths(product.slug)} title={`${name} | COLAB`} description={d.tagline}>
   <section class="hero">
-    <div class="container hero-grid">
+    <div class:list={['container', 'hero-grid', { 'with-shot': showScreenshots }]}>
       <div class="hero-text">
         <nav class="crumbs" aria-label={t('nav.products')}>
           <a href={allProducts}>{t('nav.products')}</a>
@@ -42,7 +42,7 @@ const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
           <a class="btn btn-outline" href={company.phoneHref}>{company.phone}</a>
         </div>
       </div>
-      <div class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}: {name}]</div>
+      {showScreenshots && <div class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}: {name}]</div>}
     </div>
   </section>
 
@@ -184,7 +184,7 @@ const allProducts = `${localePath(lang, '/')}#${sectionIds[lang].products}`;
   }
 
   @media (min-width: 60rem) {
-    .hero-grid {
+    .hero-grid.with-shot {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 4rem;
     }

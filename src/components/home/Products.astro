@@ -1,5 +1,6 @@
 ---
 import { productPath, products } from '../../data/products';
+import { showScreenshots } from '../../data/site';
 import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
 interface Props {
@@ -30,8 +31,8 @@ const href = (p: (typeof products)[number]) => (p.detail ? localePath(lang, prod
         {
           featured.map((p) => (
             <li>
-              <a class="card" href={href(p)}>
-                <span class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}]</span>
+              <a class:list={['card', { 'text-only': !showScreenshots }]} href={href(p)}>
+                {showScreenshots && <span class="placeholder shot" aria-hidden="true">[{t('products.screenshot')}]</span>}
                 <span class="card-body">
                   <span class="no">{p.no}</span>
                   <h3 class="card-title">{p.name[lang]}</h3>
@@ -104,6 +105,11 @@ const href = (p: (typeof products)[number]) => (p.detail ? localePath(lang, prod
     color: var(--color-ink);
     border-color: var(--color-ink);
     transform: translateY(-2px);
+  }
+
+  /* Without screenshots the cards keep an accent line on top, like the service cards, so they still stand out from the list. */
+  .card.text-only {
+    border-top: 3px solid var(--color-accent);
   }
 
   .shot {

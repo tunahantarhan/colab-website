@@ -1,5 +1,5 @@
 ---
-import { foundingVars } from '../../data/site';
+import { foundingVars, showScreenshots } from '../../data/site';
 import { type Lang, localePath, sectionIds, useTranslations } from '../../i18n/ui';
 
 interface Props {
@@ -25,17 +25,25 @@ const home = localePath(lang, '/');
     </div>
   </div>
 
-  <div class="container">
-    <!-- A browser-style frame around the product screenshot. The image itself is still a placeholder. -->
-    <div class="stage">
-      <figure class="window">
-        <div class="window-bar" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="placeholder screen" role="img" aria-label={t('hero.screenshot')}>
-          [{t('hero.screenshot')}]
+  {
+    showScreenshots && (
+      <div class="container">
+        {/* A browser-style frame around the product screenshot. The image itself is still a placeholder. */}
+        <div class="stage">
+          <figure class="window">
+            <div class="window-bar" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div class="placeholder screen" role="img" aria-label={t('hero.screenshot')}>
+              [{t('hero.screenshot')}]
+            </div>
+          </figure>
         </div>
-      </figure>
-    </div>
-  </div>
+      </div>
+    )
+  }
 </section>
 
 <style>

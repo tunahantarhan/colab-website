@@ -21,6 +21,13 @@ export const company = {
   linkedin: 'https://www.linkedin.com/company/colab-bilisim-ve-danismanlik-hizmetleri/',
 };
 
+/**
+ * Screenshots are switched off until the product interface gets its planned redesign.
+ * The frames and placeholders stay in the code, so setting this back to true brings them all back:
+ * the home page hero, the featured product cards and the product page heroes.
+ */
+export const showScreenshots = false;
+
 /** Full years since founding, so the "10 years" claim updates itself every January. */
 export const yearsActive = new Date().getFullYear() - company.foundedYear;
 
