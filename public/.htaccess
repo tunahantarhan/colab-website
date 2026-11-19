@@ -1,0 +1,16 @@
+# Server settings for the Doruk Net (Apache) hosting. Other hosts, such as the GitHub Pages preview, ignore this file.
+
+# The site is plain HTML now; without this line Apache may still look for WordPress's index.php first.
+DirectoryIndex index.html
+
+# Unknown addresses, including links to pages of the old WordPress site, get the site's own 404 page.
+ErrorDocument 404 /404.html
+
+# Redirect plain http to https. Turn this on only after the SSL certificate works for both colab.com.tr and www,
+# otherwise visitors are sent to a page that shows a security warning. The hosting panel's own
+# "force HTTPS" switch does the same job; use one or the other, not both.
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} off
+#   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>

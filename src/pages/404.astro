@@ -1,0 +1,72 @@
+---
+// The "page not found" page. The server shows it for any unknown address (see public/.htaccess),
+// which matters most right after launch, when links to the old WordPress site still point at pages that no longer exist.
+// There is only one 404 page, so it carries a short English line as well.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath, sectionIds } from '../i18n/ui';
+---
+
+<BaseLayout lang="tr" title="Sayfa bulunamadı | COLAB" noindex>
+  <section class="section">
+    <div class="container content">
+      <p class="eyebrow">404</p>
+      <h1>Aradığınız sayfa bulunamadı.</h1>
+      <p class="lead">Sitemiz yenilendi. Eski bir bağlantıdan geldiyseniz aradığınız içerik artık başka bir adreste olabilir.</p>
+      <div class="buttons">
+        <a class="btn btn-dark" href={localePath('tr', '/')}>Ana sayfaya dönün</a>
+        <a class="btn btn-outline" href={`${localePath('tr', '/')}#${sectionIds.tr.products}`}>Ürünleri inceleyin</a>
+      </div>
+      <p class="en" lang="en">
+        Page not found. <a href={localePath('en', '/')}>Go to the English home page</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-block: clamp(2rem, 6vw, 4rem);
+  }
+
+  h1 {
+    max-width: 18ch;
+    font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+
+  .lead {
+    max-width: 36rem;
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-text);
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 30rem) {
+    .buttons .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  .en {
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+
+  .en a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
