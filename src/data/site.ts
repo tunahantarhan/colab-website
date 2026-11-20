@@ -1,5 +1,4 @@
 import { type Lang, trAblative } from '../i18n/ui';
-import { products } from './products';
 
 // Company facts that are the same in every language.
 // When a CMS is added later, this is the file it should take over.
@@ -18,6 +17,14 @@ export const company = {
   phoneHref: 'tel:+905496862600',
   // Shown on two lines in the footer and joined into one line in running text such as the KVKK notice.
   addressLines: ['Esentepe Mahallesi, Büyükdere Caddesi, No: 199', '(Levent 199 Yan Giriş), Şişli / İstanbul'],
+  // The same address split into fields, for the structured data search engines read.
+  postalAddress: {
+    streetAddress: 'Esentepe Mahallesi, Büyükdere Caddesi, No: 199 (Levent 199 Yan Giriş)',
+    addressLocality: 'Şişli',
+    addressRegion: 'İstanbul',
+    postalCode: '34330',
+    addressCountry: 'TR',
+  },
   linkedin: 'https://www.linkedin.com/company/colab-bilisim-ve-danismanlik-hizmetleri/',
 };
 
@@ -39,18 +46,19 @@ export const foundingVars = {
 };
 
 export interface Stat {
-  /** The big figure. Values in square brackets are placeholders we still need real numbers for. */
+  /** The big figure. */
   value: string;
   label: Record<Lang, string>;
 }
 
-// The figures band under the hero. Only the first two are known facts; the rest wait for numbers from management.
+// The figures band under the hero and on the About page. Product, project and user counts come from management (20.11.2026).
+// The product figure counts every product COLAB has, not just the ones listed on the site.
 export const stats: Stat[] = [
   {
     value: `${yearsActive}+`,
     label: { tr: `yıllık deneyim, ${foundingVars.yearFrom} beri`, en: `years of experience, since ${company.foundedYear}` },
   },
-  { value: String(products.length), label: { tr: 'kurumsal ürün', en: 'enterprise products' } },
-  { value: '[X]+', label: { tr: 'tamamlanan proje', en: 'projects delivered' } },
-  { value: '[X]+', label: { tr: 'aktif kullanıcı', en: 'active users' } },
+  { value: '20+', label: { tr: 'kurumsal ürün', en: 'enterprise products' } },
+  { value: '100+', label: { tr: 'tamamlanan proje', en: 'projects delivered' } },
+  { value: '5000+', label: { tr: 'aktif kullanıcı', en: 'active users' } },
 ];

@@ -33,7 +33,7 @@ export const ui = {
     'stats.title': 'Rakamlarla COLAB',
 
     'products.label': 'Ürünler',
-    'products.title': 'Kurumunuza göre uyarlanan {count} uygulama.',
+    'products.title': 'Kurumunuza göre uyarlanan uygulamalar.',
     'products.lead': 'Hepsi mobil uyumlu, birbiriyle entegre çalışır.',
     'products.screenshot': 'Ekran görüntüsü',
 
@@ -98,7 +98,7 @@ export const ui = {
     'stats.title': 'COLAB in numbers',
 
     'products.label': 'Products',
-    'products.title': '{count} applications tailored to your organisation.',
+    'products.title': 'Applications tailored to your organisation.',
     'products.lead': 'All of them work on mobile and integrate with each other.',
     'products.screenshot': 'Screenshot',
 
