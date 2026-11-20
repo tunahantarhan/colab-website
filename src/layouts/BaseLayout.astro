@@ -22,7 +22,7 @@ const t = useTranslations(lang);
 const pageTitle = title ?? t('meta.title');
 const pageDescription = description ?? t('meta.description');
 const canonical = new URL(localePath(lang, pathFor(path, lang)), Astro.site);
-// Preview deployments (e.g. GitHub Pages) set this so search engines don't index a copy of the real site.
+// Staging builds set this so search engines don't index a copy of the real site.
 const noindex = pageNoindex || import.meta.env.PUBLIC_NOINDEX === 'true';
 const absolute = (p: string) => new URL(withBase(p), Astro.site).href;
 const ogImage = absolute('/og-image.png');

@@ -2,9 +2,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// The production domain and path come from the environment so the same code can be deployed in two places:
-// the real domain at the root, and the GitHub Pages preview under /colab-website.
-// Without any variables set, the build targets the real domain.
+// Without any environment variables the build targets the real domain at the root.
+// SITE_URL and BASE_PATH exist for staging copies served elsewhere or from a sub-folder.
 const site = process.env.SITE_URL ?? 'https://www.colab.com.tr';
 const base = process.env.BASE_PATH ?? '/';
 

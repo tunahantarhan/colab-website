@@ -1,4 +1,4 @@
-# Server settings for the Doruk Net (Apache) hosting. Other hosts, such as the GitHub Pages preview, ignore this file.
+# Server settings for the Doruk Net (Apache) hosting. Hosts that don't run Apache simply ignore this file.
 
 # The site is plain HTML now; without this line Apache may still look for WordPress's index.php first.
 DirectoryIndex index.html
