@@ -4,6 +4,7 @@ import '@fontsource-variable/manrope';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { company } from '../data/site';
 import { type Lang, type PagePath, languages, localePath, pathFor, useTranslations, withBase } from '../i18n/ui';
 
 interface Props {
@@ -23,6 +24,39 @@ const pageDescription = description ?? t('meta.description');
 const canonical = new URL(localePath(lang, pathFor(path, lang)), Astro.site);
 // Preview deployments (e.g. GitHub Pages) set this so search engines don't index a copy of the real site.
 const noindex = pageNoindex || import.meta.env.PUBLIC_NOINDEX === 'true';
+const absolute = (p: string) => new URL(withBase(p), Astro.site).href;
+const ogImage = absolute('/og-image.png');
+
+// On the home pages, tell search engines who the company is and what the site is called.
+// Google uses this for the site name and logo it shows next to search results.
+const isHome = pathFor(path, lang) === '/';
+const homeUrl = new URL(localePath(lang, '/'), Astro.site).href;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${absolute('/')}#organization`,
+      name: 'COLAB',
+      legalName: company.tradeName,
+      url: absolute('/'),
+      logo: absolute('/icon-512.png'),
+      email: company.email,
+      telephone: company.phoneHref.replace('tel:', ''),
+      address: { '@type': 'PostalAddress', ...company.postalAddress },
+      sameAs: [company.linkedin],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${homeUrl}#website`,
+      name: 'COLAB',
+      alternateName: 'COLAB Bilişim',
+      url: homeUrl,
+      inLanguage: lang === 'tr' ? 'tr-TR' : 'en-US',
+      publisher: { '@id': `${absolute('/')}#organization` },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -41,12 +75,24 @@ const noindex = pageNoindex || import.meta.env.PUBLIC_NOINDEX === 'true';
           <link rel="alternate" hreflang={l} href={new URL(localePath(l, pathFor(path, l)), Astro.site)} />
         ))
     }
+    {/* The .ico and PNG versions are for search engines and older browsers; modern browsers pick the SVG. */}
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32 48x48" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="192x192" href={withBase('/favicon-192x192.png')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <meta property="og:site_name" content="COLAB" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={lang === 'tr' ? 'tr_TR' : 'en_US'} />
+    {/* The preview image for links shared on WhatsApp, LinkedIn and similar apps. */}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="COLAB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {isHome && !pageNoindex && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   </head>
   <body>
     <a class="skip-link" href="#main">{t('skip')}</a>
